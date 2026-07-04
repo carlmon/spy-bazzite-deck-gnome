@@ -9,10 +9,15 @@ cp -avf "/ctx/system_files"/. /
 ## rocm-smi is deprecated but still needed for btop
 
 dnf5 install -y \
-    doublecmd-gtk \
-    terminator \
+    aria2 \
     atop \
-    rocm-smi
+    doublecmd-gtk \
+    mediainfo \
+    miller \
+    plocate \
+    rocm-smi \
+    terminator \
+    trash-cli
 
 # Enable/disable system unit files
 
