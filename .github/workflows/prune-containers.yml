@@ -1,0 +1,15 @@
+---
+name: Weekly Image Cleanup
+on:
+  schedule:
+    - cron: '15 19 * * 5'  # 19:15 UTC every Friday
+  workflow_dispatch:
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - uses: dataaxiom/ghcr-cleanup-action@d52806a0dc70b430571a37da1fde39733ffd640f
+        with:
+          keep-n-tagged: 3
