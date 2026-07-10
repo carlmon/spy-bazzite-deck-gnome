@@ -1,3 +1,3 @@
 # spy-bazzite-deck-gnome
 
-Some tweaks to my OS base image.
+Tweaks to my OS base image based on [upstream Bazzite](https://github.com/ublue-os/bazzite/releases).

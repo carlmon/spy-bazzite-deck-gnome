@@ -18,7 +18,8 @@ dnf5 install -y \
     plocate \
     rocm-smi \
     terminator \
-    trash-cli
+    trash-cli \
+    xclip
 
 # Enable/disable system unit files
 
