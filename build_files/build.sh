@@ -4,6 +4,14 @@ set -ouex pipefail
 # Copy the contents of system_files/ of the git repo to /
 cp -avf "/ctx/system_files"/. /
 
+# Uninstall packages from base. End with '|| true' to avoid errors.
+
+dnf5 remove -y \
+    passim \
+    qemu-guest-agent \
+    virtualbox-guest-additions \
+    || true
+
 # Install packages
 
 ## rocm-smi is deprecated but still needed for btop
