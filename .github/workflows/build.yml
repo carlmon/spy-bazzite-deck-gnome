@@ -6,7 +6,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '15 18 * * 5'  # 18:15 UTC every Friday
+    - cron: '0 20 * * *'  # 8PM UTC every day
   push:
     branches:
       - main
@@ -34,6 +34,21 @@ jobs:
       id-token: write
 
     steps:
+      - name: Check if upstream changed in last 24 hours
+        id: check
+        run: |
+          upstream_image="ghcr.io/ublue-os/bazzite-deck-gnome:testing"
+          upstream_date=$(docker buildx imagetools inspect $upstream_image --format '{{.Image.Created}}')
+          upstream_timestamp=$(date -u -d "${upstream_date% UTC}" +%s)
+          now=$(date -u +%s)
+          cutoff=$((now - 24*3600))
+          if [ "$upstream_timestamp" -gt "$cutoff" ]; then
+            echo "Upstream image changed at $upstream_date, proceeding with build."
+          else
+            echo "Upstream image has not changed in the last 24 hours ($upstream_date), skipping build."
+            exit 78
+          fi
+
       # These stage versions are pinned by https://github.com/renovatebot/renovate
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
