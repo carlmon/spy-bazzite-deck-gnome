@@ -4,7 +4,7 @@ set -ouex pipefail
 # Copy the contents of system_files/ of the git repo to /
 cp -avf "/ctx/system_files"/. /
 
-# Uninstall packages from base. End with '|| true' to avoid errors.
+# Uninstall packages from base. End with '|| true' to ignore missing packages 
 
 dnf5 remove -y \
     passim \
@@ -23,6 +23,7 @@ dnf5 install -y \
     mediainfo \
     miller \
     nmap \
+    iotop-c \
     plocate \
     rocm-smi \
     terminator \
