@@ -18,7 +18,7 @@ jobs:
       - name: Check if upstream changed in last 24 hours
         id: check
         run: |
-          upstream_image="ghcr.io/ublue-os/bazzite-deck-gnome:testing"
+          upstream_image="ghcr.io/ublue-os/bazzite-deck-gnome:stable"
           upstream_date=$(docker buildx imagetools inspect $upstream_image --format '{{.Image.Created}}')
           upstream_timestamp=$(date -u -d "${upstream_date% UTC}" +%s)
           now=$(date -u +%s)
@@ -32,5 +32,4 @@ jobs:
               -d '{"ref":"main"}'
           else
             echo "Upstream image has not changed in the last 24 hours ($upstream_date), skipping build."
-            exit 78
           fi

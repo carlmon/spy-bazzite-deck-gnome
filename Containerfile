@@ -4,7 +4,7 @@ COPY build_files /
 COPY system_files /system_files
 
 # Base Image
-FROM ghcr.io/ublue-os/bazzite-deck-gnome:testing
+FROM ghcr.io/ublue-os/bazzite-deck-gnome:stable
 
 # Make modifications and install packages in build.sh
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
