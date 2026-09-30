@@ -20,11 +20,13 @@ dnf5 install -y \
     aria2 \
     atop \
     doublecmd-gtk \
+    libvirt \
     mediainfo \
     miller \
     nmap \
     iotop-c \
     plocate \
+    qemu-kvm \
     rocm-smi \
     terminator \
     trash-cli \
