@@ -29,8 +29,7 @@ dnf5 install -y \
     qemu-kvm \
     rocm-smi \
     terminator \
-    trash-cli \
-    xclip
+    trash-cli
 
 # Enable/disable system unit files
 
