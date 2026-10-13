@@ -2,7 +2,7 @@
 name: Daily change check trigger
 on:
   schedule:
-    - cron: '0 20 * * *'  # 8PM UTC every day
+    - cron: '*/30 * * * *'  # every 30 mins
   workflow_dispatch:
 
 jobs:
@@ -16,20 +16,25 @@ jobs:
       
     steps:
       - name: Check if upstream changed in last 24 hours
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: check
         run: |
-          upstream_image="ghcr.io/ublue-os/bazzite-deck-gnome:stable"
-          upstream_date=$(docker buildx imagetools inspect $upstream_image --format '{{.Image.Created}}')
-          upstream_timestamp=$(date -u -d "${upstream_date% UTC}" +%s)
-          now=$(date -u +%s)
-          cutoff=$((now - 24*3600))
-          if [ "$upstream_timestamp" -gt "$cutoff" ]; then
-            echo "Upstream image changed at $upstream_date, proceeding with build."
+          UPSTREAM_IMAGE="ghcr.io/ublue-os/bazzite-deck-gnome:stable"
+          UPSTREAM_DATE=$(docker buildx imagetools inspect $UPSTREAM_IMAGE --format '{{.Image.Created}}')
+          UPSTREAM_TIMESTAMP=$(date -u -d "${UPSTREAM_DATE% UTC}" +%s)
+          LAST_RUN_DATE=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/300058739/runs?status=success&per_page=5" --jq "[.workflow_runs[] | select(.id != $GITHUB_RUN_ID)][0].run_started_at // empty")
+          LAST_RUN_TIMESTAMP=$(date -u -d "${LAST_RUN_DATE% UTC}" +%s)
+
+          echo "Last run date: $LAST_RUN_DATE"
+          echo "Upstream date: $UPSTREAM_DATE"
+          if [ "$UPSTREAM_TIMESTAMP" -gt "$LAST_RUN_TIMESTAMP" ]; then
+            echo "Upstream image changed at $UPSTREAM_DATE, proceeding with build."
             curl -sS -X POST \
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               https://api.github.com/repos/${{ github.repository }}/actions/workflows/build.yml/dispatches \
               -d '{"ref":"main"}'
           else
-            echo "Upstream image has not changed in the last 24 hours ($upstream_date), skipping build."
+            echo "Upstream image has not changed since last run, skipping build."
           fi
