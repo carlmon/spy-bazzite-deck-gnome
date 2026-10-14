@@ -2,13 +2,13 @@
 name: Daily change check trigger
 on:
   schedule:
-    - cron: '*/30 * * * *'  # every 30 mins
+    - cron: '17/30 * * * *'  # every 30 mins, e.g. 00:17, 00:47, 01:17, etc.
   workflow_dispatch:
 
 jobs:
   check_upstream:
     name: Check if upstream changed and trigger build if so
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
 
     permissions:
       actions: write
