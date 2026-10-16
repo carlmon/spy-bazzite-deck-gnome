@@ -29,7 +29,8 @@ dnf5 install -y \
     qemu-kvm \
     rocm-smi \
     terminator \
-    trash-cli
+    trash-cli \
+    virt-viewer
 
 # Enable/disable system unit files
 
